@@ -27,7 +27,7 @@ pip install --upgrade pip
 
 # Install required packages
 echo "Installing dependencies..."
-pip install pandas scikit-learn jupyter matplotlib seaborn numpy scipy
+pip install pandas scikit-learn jupyter matplotlib seaborn numpy scipy plotly umap-learn
 
 echo "Setup complete!"
 echo ""

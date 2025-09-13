@@ -33,6 +33,8 @@
 - seaborn - statistical data visualization
 - numpy - numerical computing
 - scipy - scientific computing
+- plotly - interactive data visualization
+- umap-learn - UMAP dimensionality reduction
 
 ### Usage
 **macOS/Linux:**
