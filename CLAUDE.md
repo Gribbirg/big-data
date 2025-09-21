@@ -46,3 +46,10 @@
 ```cmd
 setup.bat
 ```
+
+## Utility Scripts
+
+### Notebook Cleaning
+- `scripts/clean_notebook.py` - removes jetTransient metadata that prevents HTML export
+- **Usage**: `python scripts/clean_notebook.py path/to/notebook.ipynb`
+- **Example**: `python scripts/clean_notebook.py practical_work_3/practical_work_3.ipynb`
