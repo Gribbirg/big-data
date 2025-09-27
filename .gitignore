@@ -158,5 +158,3 @@ cython_debug/
 #  project, it is recommended to comment the following line:
 #.idea/
 
-# PDF files
-*.pdf
