@@ -28,7 +28,7 @@ python -m pip install --upgrade pip
 
 REM Install required packages
 echo Installing dependencies...
-pip install pandas scikit-learn jupyter matplotlib seaborn numpy scipy plotly umap-learn
+pip install pandas scikit-learn jupyter matplotlib seaborn numpy scipy plotly umap-learn statsmodels
 
 echo Setup complete!
 echo.

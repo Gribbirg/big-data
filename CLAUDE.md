@@ -35,6 +35,7 @@
 - scipy - scientific computing
 - plotly - interactive data visualization
 - umap-learn - UMAP dimensionality reduction
+- statsmodels - statistical modeling and econometrics
 
 ### Usage
 **macOS/Linux:**
