@@ -158,3 +158,8 @@ cython_debug/
 #  project, it is recommended to comment the following line:
 #.idea/
 
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
