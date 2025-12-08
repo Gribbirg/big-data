@@ -287,6 +287,24 @@ hr {
     font-weight: bold;
 }
 
+.page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 16px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.slide.title-slide .page-number,
+.slide.conclusion-slide .page-number {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body {
+    position: relative;
+}
+
 @media print {
     body {
         padding: 0;
