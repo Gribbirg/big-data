@@ -1,0 +1,133 @@
+{
+  "dashboard": {
+    "title": "Ecommerce Analytics",
+    "tags": ["ecommerce", "analytics"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 0,
+    "refresh": "",
+    "time": {
+      "from": "2016-01-01T00:00:00.000Z",
+      "to": "2019-01-01T00:00:00.000Z"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "type": "timeseries",
+        "title": "4.1. Динамика числа заказов по месяцам",
+        "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+        "targets": [
+          {
+            "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+            "rawSql": "SELECT DATE_TRUNC('month', order_purchase_timestamp) AS time, COUNT(DISTINCT order_id) AS value FROM orders WHERE order_purchase_timestamp IS NOT NULL GROUP BY time ORDER BY time;",
+            "format": "time_series",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "type": "timeseries",
+        "title": "4.5.2. Средняя стоимость заказа",
+        "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+        "targets": [
+          {
+            "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+            "rawSql": "SELECT DATE_TRUNC('month', o.order_purchase_timestamp) AS time, ROUND(AVG(oi.price), 2) AS value FROM orders o JOIN order_items oi ON o.order_id = oi.order_id WHERE o.order_purchase_timestamp IS NOT NULL GROUP BY time ORDER BY time;",
+            "format": "time_series",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 8},
+        "type": "barchart",
+        "title": "4.2. Распределение по оценкам",
+        "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+        "targets": [
+          {
+            "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+            "rawSql": "SELECT CAST(review_score AS text) AS metric, COUNT(order_id) AS value FROM order_reviews GROUP BY review_score ORDER BY review_score;",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        },
+        "options": {"orientation": "vertical", "showValue": "always"}
+      },
+      {
+        "id": 4,
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 8},
+        "type": "piechart",
+        "title": "4.3. Способы оплаты",
+        "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+        "targets": [
+          {
+            "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+            "rawSql": "SELECT payment_type AS metric, COUNT(DISTINCT order_id)::numeric AS value FROM order_payments WHERE payment_type <> 'not_defined' GROUP BY payment_type ORDER BY value DESC;",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "short"
+          }
+        },
+        "options": {
+          "pieType": "pie",
+          "displayLabels": ["name", "percent"],
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true,
+            "values": ["value", "percent"]
+          },
+          "reduceOptions": {
+            "values": true
+          }
+        }
+      },
+      {
+        "id": 5,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "type": "barchart",
+        "title": "4.4. ТОП-10 категорий",
+        "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+        "targets": [
+          {
+            "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+            "rawSql": "SELECT pcnt.product_category_name_english AS metric, SUM(oi.price) AS value FROM order_items oi JOIN products p ON oi.product_id = p.product_id LEFT JOIN product_category_name_translation pcnt ON p.product_category_name = pcnt.product_category_name WHERE p.product_category_name IS NOT NULL GROUP BY pcnt.product_category_name_english ORDER BY value DESC LIMIT 10;",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "options": {"orientation": "horizontal", "showValue": "always"}
+      },
+      {
+        "id": 6,
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+        "type": "table",
+        "title": "4.5.1. Статистика по штатам",
+        "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+        "targets": [
+          {
+            "datasource": {"type": "postgres", "uid": "d55c0df2-889e-4fc5-9219-fd44d33cebac"},
+            "rawSql": "SELECT c.customer_state AS state, COUNT(DISTINCT o.order_id) AS order_count, ROUND(AVG(EXTRACT(DAY FROM (o.order_delivered_customer_date - o.order_purchase_timestamp))::numeric), 1) AS avg_delivery_days, ROUND(AVG(r.review_score)::numeric, 2) AS avg_rating FROM orders o JOIN customers c ON o.customer_id = c.customer_id LEFT JOIN order_reviews r ON o.order_id = r.order_id WHERE o.order_delivered_customer_date IS NOT NULL AND o.order_purchase_timestamp IS NOT NULL GROUP BY c.customer_state ORDER BY order_count DESC LIMIT 15;",
+            "format": "table",
+            "refId": "A"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}
